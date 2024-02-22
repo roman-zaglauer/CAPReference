@@ -81,7 +81,7 @@ modules:
   ## UI5 APP A
   - name: app-a
     type: html5
-    path: src/cap-reference/app/app-a
+    path: src/module-a/app/app-a
     build-parameters:
       build-result: dist
       builder: custom
@@ -93,7 +93,7 @@ modules:
   ## UI5 APP B
   # - name: app-b
   #   type: html5
-  #   path: src/cap-reference/app/app-b
+  #   path: src/module-a/app/app-b
   #   build-parameters:
   #     build-result: dist
   #     builder: custom

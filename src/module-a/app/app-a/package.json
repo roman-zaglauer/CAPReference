@@ -20,7 +20,9 @@
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "@sap-ux/eslint-plugin-fiori-tools": "^0.2.0",
-    "@sap-ux/ui5-middleware-fe-mockserver": "2"
+    "@sap-ux/ui5-middleware-fe-mockserver": "2",
+    "@sap/ui5-builder-webide-extension": "^1",
+    "ui5-task-zipper": "^3"
   },
   "scripts": {
     "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
@@ -30,5 +32,11 @@
     "prebuild": "npm run ts-typecheck",
     "deploy": "fiori verify",
     "deploy-config": "fiori add deploy-config"
-  }
+  },
+  "ui5": {
+    "dependencies": [
+        "@sap/ui5-builder-webide-extension",
+        "ui5-task-zipper"
+    ]
+}
 }
