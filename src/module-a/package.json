@@ -1,0 +1,153 @@
+{
+  "name": "cap-reference",
+  "version": "1.0.0",
+  "description": "CAP Reference Module A",
+  "repository": "https://github.com/roman-zaglauer/CAPReference",
+  "license": "Apache-2.0",
+  "author": "Roman Zaglauer",
+  "private": true,
+  "engines": {
+    "node": ">=18.12.1"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "start:without-mtx-sidecar": "cds-ts serve --profile without-mtx-sidecar",
+    "update": "npx npm-check-updates -u && npm install",
+    "build": "npx -p @sap/cds-dk cds build --production && npx tsc -b && npm run build:cds-types",
+    "build:cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory ./gen/srv/srv/types/@cds-models",
+    "install:cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory ./srv/types/@cds-models",
+    "lint": "cds lint && eslint . --ext .ts",
+    "test": "jest",
+    "watch": "cds-ts watch",
+    "watch:mtx": "cd mtx/sidecar/srv && npm run watch",
+    "watch:without-mtx-sidecar": "cds-ts watch --profile without-mtx-sidecar",
+    "subscribe:t1": "cds subscribe t1 --to http://localhost:4005 -u alice:",
+    "subscribe:t2": "cds subscribe t2 --to http://localhost:4005 -u erin:",
+    "profile:with-mtx-sidecar": "cds env get requires --profile with-mtx-sidecar",
+    "profile:without-mtx-sidecar": "cds env get requires --profile without-mtx-sidecar",
+    "watch-app-a": "cds watch --open cap.refernce.appa/index.html?sap-ui-xx-viewCache=false --livereload false"
+  },
+  "dependencies": {
+    "@sap-cloud-sdk/connectivity": "^3",
+    "@sap-cloud-sdk/http-client": "^3",
+    "@sap-cloud-sdk/resilience": "^3",
+    "@sap-cloud-sdk/util": "^3",
+    "@sap/approuter": "^16",
+    "@sap/cds": "^7",
+    "@sap/cds-common-content": "^1",
+    "@sap/cds-hana": "^2",
+    "@sap/cds-mtxs": "^1",
+    "@sap/xsenv": "^4",
+    "@sap/xssec": "^3",
+    "express": "^4",
+    "hdb": "^0",
+    "luxon": "^3",
+    "passport": "^0",
+    "ts-node": "^10"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds": "^7",
+    "@sap/cds-dk": "^7",
+    "@sap/eslint-plugin-cds": "^2",
+    "@sap/generator-fiori": "^1",
+    "@sap/ui5-builder-webide-extension": "^1",
+    "@sap/ux-specification": "^1",
+    "@sap/ux-ui5-tooling": "^1",
+    "@types/chai": "^4",
+    "@types/express": "^4",
+    "@types/jest": "^29",
+    "@types/luxon": "^3",
+    "@types/node": "^20",
+    "@types/object-mapper": "^6",
+    "@types/sap__xsenv": "^3",
+    "@typescript-eslint/eslint-plugin": "^7",
+    "@typescript-eslint/parser": "^7",
+    "@ui5/cli": "^3",
+    "axios": "^1",
+    "better-sqlite3": "9",
+    "cds-plugin-ui5": "^0",
+    "chai": "^5",
+    "chai-subset": "^1",
+    "eslint": "^8",
+    "eslint-config-prettier": "^9",
+    "eslint-plugin-prettier": "^5",
+    "eslint-plugin-security": "^2",
+    "eslint-plugin-security-node": "^1",
+    "jest": "^29",
+    "npm-run-all": "^4",
+    "prettier": "^3",
+    "ts-jest": "^29",
+    "typescript": "^5"
+  },
+  "cds": {
+    "profile": "with-mtx-sidecar",
+    "i18n": {
+      "folders": [
+        "./i18n",
+        "_i18n",
+        "i18n",
+        "assets/i18n"
+    ]
+    },
+    "requires": {
+      "[without-mtx-sidecar]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "database": ":memory:"
+          }
+        },
+        "multitenancy": false
+      },
+      "[development]": {
+        "db": {
+          "credentials": {
+            "database": "../../.sqlite/db.sqlite"
+          }
+        },
+        "multitenancy": true
+      },
+      "[production]": {
+        "db": {
+          "kind": "hana"
+        },
+        "multitenancy": true,
+        "auth": {
+          "kind": "xsuaa"
+        },
+        "approuter": {
+          "kind": "cloudfoundry"
+        }
+      },
+      "API_BUSINESS_PARTNER": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_BUSINESS_PARTNER",
+        "csrf": true,
+        "csrfInBatch": true,
+        "[without-mtx-sidecar]": {
+          "credentials": {
+            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "destination": "SAML",
+            "path": "/sap/opu/odata/sap/API_BUSINESS_PARTNER"
+          }
+        }
+      }
+    }
+  },
+  "imports": {
+    "#cds-models/*": "./srv/types/@cds-models/*/index.js"
+  },
+  "sapux": [
+    "app/app-a"
+  ]
+}

@@ -1,0 +1,22 @@
+# ignore node modules
+node_modules/
+
+# ignore build and distribution folders
+build/
+dist/
+
+# ignore vendor folders
+vendor/
+
+# ignore coverage reports
+coverage/
+
+# ignore temporary files
+*.tmp
+
+# ignore test files
+__tests__/
+test/**/*.js
+
+# ignore specific files
+# specific-file.js

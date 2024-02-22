@@ -1,0 +1,94 @@
+{
+  "authorities": [
+    "$XSAPPNAME.cds.Subscriber",
+    "$XSAPPNAME.MtxDiagnose",
+    "$XSAPPNAME.mtdeployment",
+    "$XSAPPNAME.mtcallback"
+  ],
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.api",
+      "description": "Grants Access To  API",
+      "grant-as-authority-to-apps": ["$XSAPPNAME(broker, cap-reference-api)"]
+    },
+    {
+      "name": "$XSAPPNAME.jobscheduler",
+      "description": "Job Scheduler",
+      "grant-as-authority-to-apps": ["$XSSERVICENAME(cap-reference-job-scheduler)"]
+    },
+    {
+      "name": "$XSAPPNAME.CAPReferenceViewer",
+      "description": "CAP Reference Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.CAPReferenceManager",
+      "description": "CAP Reference Manager"
+    },
+    {
+      "name": "$XSAPPNAME.CAPReferenceAdministrator",
+      "description": "CAP Reference Administrator"
+    },
+    {
+      "name": "$XSAPPNAME.mtcallback",
+      "description": "Subscription via SaaS Registry",
+      "grant-as-authority-to-apps": ["$XSAPPNAME(application,sap-provisioning,tenant-onboarding)"]
+    },
+    {
+      "name": "$XSAPPNAME.MtxDiagnose",
+      "description": "Diagnose MTX"
+    },
+    {
+      "name": "$XSAPPNAME.mtdeployment",
+      "description": "Deploy application"
+    },
+    {
+      "name": "$XSAPPNAME.cds.Subscriber",
+      "description": "Subscribe to application"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "CAPReferenceViewer",
+      "description": "CAP Reference Viewer Viewer",
+      "scope-references": ["$XSAPPNAME.CAPReferenceViewer"]
+    },
+    {
+      "name": "CAPReferenceManager",
+      "description": "CAP Reference Manager",
+      "scope-references": ["$XSAPPNAME.CAPReferenceManager"]
+    },
+    {
+      "name": "CAPReferenceAdministrator",
+      "description": "CAP Reference Administrator",
+      "scope-references": ["$XSAPPNAME.CAPReferenceAdministrator"]
+    },
+    {
+      "name": "MultitenancyAdministrator",
+      "description": "Administrate multitenant applications",
+      "scope-references": ["$XSAPPNAME.MtxDiagnose", "$XSAPPNAME.mtdeployment", "$XSAPPNAME.mtcallback"]
+    },
+    {
+      "name": "Subscriber",
+      "description": "Subscribe to application",
+      "scope-references": ["$XSAPPNAME.cds.Subscriber"]
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "CAPReferenceViewer",
+      "description": "CAP Reference Viewer",
+      "role-template-references": ["$XSAPPNAME.CAPReferenceViewer"]
+    },
+    {
+      "name": "CAPReferenceManager",
+      "description": "CAP Reference Manager",
+      "role-template-references": ["$XSAPPNAME.CAPReferenceManager"]
+    },
+    {
+      "name": "CAPReferenceAdministrator",
+      "description": "CAP Reference Administrator",
+      "role-template-references": ["$XSAPPNAME.CAPReferenceAdministrator"]
+    }
+  ]
+}

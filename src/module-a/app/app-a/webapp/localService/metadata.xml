@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference
+        Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1" />
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1" />
+    </edmx:Reference>
+    <edmx:Reference
+        Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1" />
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1" />
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CAPReferenceService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Roots" EntityType="CAPReferenceService.Roots">
+                    <NavigationPropertyBinding Path="me" Target="Persons" />
+                    <NavigationPropertyBinding Path="status" Target="Status" />
+                    <NavigationPropertyBinding Path="country" Target="Countries" />
+                    <NavigationPropertyBinding Path="leafs" Target="Leafs" />
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Roots" />
+                </EntitySet>
+                <EntitySet Name="Leafs" EntityType="CAPReferenceService.Leafs">
+                    <NavigationPropertyBinding Path="me" Target="Persons" />
+                    <NavigationPropertyBinding Path="roots" Target="Roots" />
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Leafs" />
+                </EntitySet>
+                <EntitySet Name="Persons" EntityType="CAPReferenceService.Persons" />
+                <EntitySet Name="Status" EntityType="CAPReferenceService.Status">
+                    <NavigationPropertyBinding Path="texts" Target="Status_texts" />
+                    <NavigationPropertyBinding Path="localized" Target="Status_texts" />
+                </EntitySet>
+                <EntitySet Name="Countries" EntityType="CAPReferenceService.Countries">
+                    <NavigationPropertyBinding Path="texts" Target="Countries_texts" />
+                    <NavigationPropertyBinding Path="localized" Target="Countries_texts" />
+                </EntitySet>
+                <EntitySet Name="Status_texts" EntityType="CAPReferenceService.Status_texts" />
+                <EntitySet Name="Countries_texts" EntityType="CAPReferenceService.Countries_texts" />
+                <ActionImport Name="importRoots" Action="CAPReferenceService.importRoots" />
+            </EntityContainer>
+            <EntityType Name="Roots">
+                <Key>
+                    <PropertyRef Name="ID" />
+                    <PropertyRef Name="IsActiveEntity" />
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false" />
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7" />
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255" />
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7" />
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255" />
+                <NavigationProperty Name="me" Type="CAPReferenceService.Persons">
+                    <ReferentialConstraint Property="me_ID" ReferencedProperty="ID" />
+                </NavigationProperty>
+                <Property Name="me_ID" Type="Edm.String" MaxLength="10" />
+                <Property Name="description" Type="Edm.String" />
+                <NavigationProperty Name="status" Type="CAPReferenceService.Status">
+                    <ReferentialConstraint Property="status_code" ReferencedProperty="code" />
+                </NavigationProperty>
+                <Property Name="status_code" Type="Edm.Int32" />
+                <NavigationProperty Name="country" Type="CAPReferenceService.Countries">
+                    <ReferentialConstraint Property="country_code" ReferencedProperty="code" />
+                </NavigationProperty>
+                <Property Name="country_code" Type="Edm.String" MaxLength="3" />
+                <Property Name="numberOfLeafs" Type="Edm.Int32" />
+                <NavigationProperty Name="leafs" Type="Collection(CAPReferenceService.Leafs)"
+                    Partner="roots">
+                    <OnDelete Action="Cascade" />
+                </NavigationProperty>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false"
+                    DefaultValue="true" />
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false"
+                    DefaultValue="false" />
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false"
+                    DefaultValue="false" />
+                <NavigationProperty Name="DraftAdministrativeData"
+                    Type="CAPReferenceService.DraftAdministrativeData" ContainsTarget="true" />
+                <NavigationProperty Name="SiblingEntity" Type="CAPReferenceService.Roots" />
+            </EntityType>
+            <EntityType Name="Leafs">
+                <Key>
+                    <PropertyRef Name="ID" />
+                    <PropertyRef Name="IsActiveEntity" />
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false" />
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7" />
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255" />
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7" />
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255" />
+                <NavigationProperty Name="me" Type="CAPReferenceService.Persons">
+                    <ReferentialConstraint Property="me_ID" ReferencedProperty="ID" />
+                </NavigationProperty>
+                <Property Name="me_ID" Type="Edm.String" MaxLength="10" />
+                <Property Name="description" Type="Edm.String" />
+                <Property Name="validFrom" Type="Edm.Date" />
+                <Property Name="validTo" Type="Edm.Date" />
+                <NavigationProperty Name="roots" Type="CAPReferenceService.Roots"
+                    Partner="leafs">
+                    <ReferentialConstraint Property="roots_ID" ReferencedProperty="ID" />
+                </NavigationProperty>
+                <Property Name="roots_ID" Type="Edm.Guid" />
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false"
+                    DefaultValue="true" />
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false"
+                    DefaultValue="false" />
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false"
+                    DefaultValue="false" />
+                <NavigationProperty Name="DraftAdministrativeData"
+                    Type="CAPReferenceService.DraftAdministrativeData" ContainsTarget="true" />
+                <NavigationProperty Name="SiblingEntity" Type="CAPReferenceService.Leafs" />
+            </EntityType>
+            <EntityType Name="Persons">
+                <Key>
+                    <PropertyRef Name="ID" />
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="10" Nullable="false" />
+                <Property Name="lastName" Type="Edm.String" MaxLength="40" />
+                <Property Name="firstName" Type="Edm.String" MaxLength="40" />
+                <Property Name="fullName" Type="Edm.String" MaxLength="81" />
+            </EntityType>
+            <EntityType Name="Status">
+                <Key>
+                    <PropertyRef Name="code" />
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255" />
+                <Property Name="descr" Type="Edm.String" MaxLength="1000" />
+                <Property Name="code" Type="Edm.Int32" Nullable="false" />
+                <NavigationProperty Name="texts" Type="Collection(CAPReferenceService.Status_texts)">
+                    <OnDelete Action="Cascade" />
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="CAPReferenceService.Status_texts">
+                    <ReferentialConstraint Property="code" ReferencedProperty="code" />
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="Countries">
+                <Key>
+                    <PropertyRef Name="code" />
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255" />
+                <Property Name="descr" Type="Edm.String" MaxLength="1000" />
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false" />
+                <NavigationProperty Name="texts"
+                    Type="Collection(CAPReferenceService.Countries_texts)">
+                    <OnDelete Action="Cascade" />
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="CAPReferenceService.Countries_texts">
+                    <ReferentialConstraint Property="code" ReferencedProperty="code" />
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="DraftAdministrativeData">
+                <Key>
+                    <PropertyRef Name="DraftUUID" />
+                </Key>
+                <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false" />
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" />
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="256" />
+                <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean" />
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" />
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="256" />
+                <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256" />
+                <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean" />
+            </EntityType>
+            <EntityType Name="Status_texts">
+                <Key>
+                    <PropertyRef Name="locale" />
+                    <PropertyRef Name="code" />
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false" />
+                <Property Name="name" Type="Edm.String" MaxLength="255" />
+                <Property Name="descr" Type="Edm.String" MaxLength="1000" />
+                <Property Name="code" Type="Edm.Int32" Nullable="false" />
+            </EntityType>
+            <EntityType Name="Countries_texts">
+                <Key>
+                    <PropertyRef Name="locale" />
+                    <PropertyRef Name="code" />
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false" />
+                <Property Name="name" Type="Edm.String" MaxLength="255" />
+                <Property Name="descr" Type="Edm.String" MaxLength="1000" />
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false" />
+            </EntityType>
+            <Action Name="findLeafs" IsBound="true">
+                <Parameter Name="roots" Type="CAPReferenceService.Roots" />
+                <Parameter Name="simulation" Type="Edm.Boolean" />
+            </Action>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CAPReferenceService.Roots" />
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String" />
+                <ReturnType Type="CAPReferenceService.Roots" />
+            </Action>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CAPReferenceService.Leafs" />
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String" />
+                <ReturnType Type="CAPReferenceService.Leafs" />
+            </Action>
+            <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CAPReferenceService.Roots" />
+                <ReturnType Type="CAPReferenceService.Roots" />
+            </Action>
+            <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CAPReferenceService.Roots" />
+                <Parameter Name="PreserveChanges" Type="Edm.Boolean" />
+                <ReturnType Type="CAPReferenceService.Roots" />
+            </Action>
+            <Action Name="importRoots" IsBound="false" />
+            <Annotations Target="CAPReferenceService.EntityContainer/Roots">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record Type="Capabilities.ReadRestrictionsType">
+                        <PropertyValue Property="Readable" Bool="true" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="true" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="true" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="Common.DraftRoot">
+                    <Record Type="Common.DraftRootType">
+                        <PropertyValue Property="ActivationAction"
+                            String="CAPReferenceService.draftActivate" />
+                        <PropertyValue Property="EditAction" String="CAPReferenceService.draftEdit" />
+                        <PropertyValue Property="PreparationAction"
+                            String="CAPReferenceService.draftPrepare" />
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Immutable" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Common.Label" String="{i18n>CreatedAt}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Immutable" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Core.Description" String="{i18n>UserID.Description}" />
+                <Annotation Term="Common.Label" String="{i18n>CreatedBy}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Common.Label" String="{i18n>ChangedAt}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Core.Description" String="{i18n>UserID.Description}" />
+                <Annotation Term="Common.Label" String="{i18n>ChangedBy}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/status_code">
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Status" />
+                        <PropertyValue Property="CollectionPath" String="Status" />
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty"
+                                        PropertyPath="status_code" />
+                                    <PropertyValue Property="ValueListProperty" String="code" />
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name" />
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/country">
+                <Annotation Term="Common.Label" String="{i18n>Country}" />
+                <Annotation Term="Core.Description" String="{i18n>CountryCode.Description}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/country_code">
+                <Annotation Term="Common.Label" String="{i18n>Country}" />
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="{i18n>Country}" />
+                        <PropertyValue Property="CollectionPath" String="Countries" />
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty"
+                                        PropertyPath="country_code" />
+                                    <PropertyValue Property="ValueListProperty" String="code" />
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name" />
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Core.Description" String="{i18n>CountryCode.Description}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/numberOfLeafs">
+                <Annotation Term="Core.Computed" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/IsActiveEntity">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/HasActiveEntity">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/HasDraftEntity">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Roots/DraftAdministrativeData">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations
+                Target="CAPReferenceService.findLeafs(CAPReferenceService.Roots)/simulation">
+                <Annotation Term="Common.Label" String="Simulation" />
+                <Annotation Term="UI.ParameterDefaultValue" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.EntityContainer/Leafs">
+                <Annotation Term="Common.DraftNode">
+                    <Record Type="Common.DraftNodeType">
+                        <PropertyValue Property="PreparationAction"
+                            String="CAPReferenceService.draftPrepare" />
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Immutable" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Common.Label" String="{i18n>CreatedAt}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Immutable" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Core.Description" String="{i18n>UserID.Description}" />
+                <Annotation Term="Common.Label" String="{i18n>CreatedBy}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Common.Label" String="{i18n>ChangedAt}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true" />
+                <Annotation Term="Core.Computed" Bool="true" />
+                <Annotation Term="Core.Description" String="{i18n>UserID.Description}" />
+                <Annotation Term="Common.Label" String="{i18n>ChangedBy}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/IsActiveEntity">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/HasActiveEntity">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/HasDraftEntity">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Leafs/DraftAdministrativeData">
+                <Annotation Term="UI.Hidden" Bool="true" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.EntityContainer/Persons">
+                <Annotation Term="Capabilities.SearchRestrictions">
+                    <Record Type="Capabilities.SearchRestrictionsType">
+                        <PropertyValue Property="Searchable" Bool="false" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false" />
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CAPReferenceService.importRoots()">
+                <Annotation Term="Core.OperationAvailable" Bool="true" />
+                <Annotation Term="Common.SideEffects">
+                    <Record Type="Common.SideEffectsType">
+                        <PropertyValue Property="TargetEntities">
+                            <Collection>
+                                <NavigationPropertyPath>/CAPReferenceService.EntityContainer/Roots</NavigationPropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Status">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="name" />
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Status/name">
+                <Annotation Term="Common.Label" String="{i18n>Name}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Status/descr">
+                <Annotation Term="Common.Label" String="{i18n>Description}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="name" />
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries/name">
+                <Annotation Term="Common.Label" String="{i18n>Name}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries/descr">
+                <Annotation Term="Common.Label" String="{i18n>Description}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries/code">
+                <Annotation Term="Common.Text" Path="name" />
+                <Annotation Term="Common.Label" String="{i18n>CountryCode}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData">
+                <Annotation Term="Common.Label" String="{i18n>Draft_DraftAdministrativeData}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/DraftUUID">
+                <Annotation Term="UI.Hidden" Bool="true" />
+                <Annotation Term="Common.Label" String="{i18n>Draft_DraftUUID}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/CreationDateTime">
+                <Annotation Term="Common.Label" String="{i18n>Draft_CreationDateTime}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/CreatedByUser">
+                <Annotation Term="Common.Label" String="{i18n>Draft_CreatedByUser}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/DraftIsCreatedByMe">
+                <Annotation Term="UI.Hidden" Bool="true" />
+                <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsCreatedByMe}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/LastChangeDateTime">
+                <Annotation Term="Common.Label" String="{i18n>Draft_LastChangeDateTime}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/LastChangedByUser">
+                <Annotation Term="Common.Label" String="{i18n>Draft_LastChangedByUser}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/InProcessByUser">
+                <Annotation Term="Common.Label" String="{i18n>Draft_InProcessByUser}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.DraftAdministrativeData/DraftIsProcessedByMe">
+                <Annotation Term="UI.Hidden" Bool="true" />
+                <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsProcessedByMe}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Status_texts/locale">
+                <Annotation Term="Common.Label" String="{i18n>LanguageCode}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Status_texts/name">
+                <Annotation Term="Common.Label" String="{i18n>Name}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Status_texts/descr">
+                <Annotation Term="Common.Label" String="{i18n>Description}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries_texts/locale">
+                <Annotation Term="Common.Label" String="{i18n>LanguageCode}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries_texts/name">
+                <Annotation Term="Common.Label" String="{i18n>Name}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries_texts/descr">
+                <Annotation Term="Common.Label" String="{i18n>Description}" />
+            </Annotations>
+            <Annotations Target="CAPReferenceService.Countries_texts/code">
+                <Annotation Term="Common.Text" Path="name" />
+                <Annotation Term="Common.Label" String="{i18n>CountryCode}" />
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

@@ -1,0 +1,19 @@
+{
+    "name": "cap-reference-broker",
+    "version": "1.0.0",
+    "description": "CAP Reference Service Broker Application",
+    "license": "Apache-2.0",
+    "author": "Roman Zaglauer",
+    "private": "true",
+    "engines": {
+      "node": ">=18.12.1"
+    },
+    "scripts": {
+      "start": "start-broker",
+      "init": "npx gen-catalog-ids && npx hash-broker-password -b"
+    },
+    "dependencies": {
+      "@sap/sbf": "^6"
+    }
+  }
+  

@@ -1,0 +1,18 @@
+{
+    "name": "approuter",
+    "version": "1.0.0",
+    "description": "CAP Reference Approuter",
+    "license": "Apache-2.0",
+    "private": true,
+    "engines": {
+      "node": "^18"
+    },
+    "dependencies": {
+      "@sap/cds": "^7",
+      "@sap/approuter": "^16"
+    },
+    "scripts": {
+      "cleanup": "rimraf **/node_modules && rimraf node_modules",
+      "start": "node node_modules/@sap/approuter/approuter.js"
+    }
+  }

@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "rootDir": ".",
+    "rootDirs": [ "src/module-a", "src/module-b"],
+    "declaration": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "#cds-models/*": [
+        "./src/module-a/srv/types/@cds-models/*/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/gen/**/*.ts", "**/*.test.ts", "node_modules"],
+  "references": [
+    {
+      "path": "./src/module-a"
+    },
+    {
+      "path": "./src/module-b"
+    }
+  ]
+}

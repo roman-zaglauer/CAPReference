@@ -1,0 +1,365 @@
+_schema-version: "3.3"
+ID: cap-reference
+description: "CAP Reference"
+version: 1.0.0
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployment: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm run build:module-a
+        - npm run build:module-a:mtx
+        # - npm run build:module-b
+        - npm run build:broker
+
+# MODULES
+modules:
+  ## MTX SIDECAR
+  - name: cap-reference-mtx
+    type: nodejs
+    path: gen/mtx/sidecar
+    build-parameters:
+      builder: npm-ci
+    parameters:
+      memory: 1024M
+      disk-quota: 512M
+    requires:
+      - name: cap-reference-db
+      - name: cap-reference-auth
+      - name: cap-reference-destination
+      - name: cap-reference-connectivity
+      - name: cap-reference-job-scheduler
+      - name: cap-reference-registry
+      - name: cap-reference-logging
+      - name: app-api
+        properties:
+          SUBSCRIPTION_URL: ~{app-protocol}://\${tenant_subdomain}-~{app-uri}
+    provides:
+      - name: mtx-api
+        properties:
+          mtx-url: ${default-url}
+
+  ## SERVICE
+  - name: cap-reference-srv
+    type: nodejs
+    path: gen/srv
+    build-parameters:
+      builder: npm-ci
+    parameters:
+      memory: 1024M
+      disk-quota: 1024M
+    requires:
+      - name: cap-reference-db
+      - name: cap-reference-auth
+      - name: cap-reference-destination
+      - name: cap-reference-connectivity
+      - name: cap-reference-job-scheduler
+      - name: cap-reference-logging
+      - name: cap-reference-registry
+      - name: cap-reference-autoscaler
+        parameters:
+          config:
+            instance_min_count: 1
+            instance_max_count: 5
+            scaling_rules:
+              - metric_type: memoryutil
+                threshold: 70
+                operator: ">="
+                adjustment: "+1"
+              - metric_type: memoryutil
+                threshold: 30
+                operator: "<"
+                adjustment: "-1"
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+
+  ## UI5 APP A
+  - name: app-a
+    type: html5
+    path: src/cap-reference/app/app-a
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+
+  ## UI5 APP B
+  # - name: app-b
+  #   type: html5
+  #   path: src/cap-reference/app/app-b
+  #   build-parameters:
+  #     build-result: dist
+  #     builder: custom
+  #     commands:
+  #       - npm install
+  #       - npm run build
+  #     supported-platforms: []
+
+  ## APPROUTER
+  - name: cap-reference-app
+    type: approuter.nodejs
+    path: src/approuter # from cds.env.folders. Consider also cds.env.build.target -> gen/app
+    build-parameters:
+      ignore:
+        - "index.html"
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 1024M
+      memory: 1024M
+    properties:
+      TENANT_HOST_PATTERN: "^(.*)-${default-uri}"
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: mtx-api
+        group: destinations
+        properties:
+          name: mtx-api # must be used in xs-app.json as well
+          url: ~{mtx-url}
+      - name: cap-reference-auth
+      - name: cap-reference-repo-runtime
+      - name: cap-reference-destination
+      - name: cap-reference-logging
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
+
+  ## APPLICATION CONTENT
+  - name: cap-reference-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: cap-reference-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: gen/app/resources
+      requires:
+        - name: app-a
+          target-path: gen/app/resources/
+          artifacts:
+            - app-a.zip
+        # - name: app-b
+        #   target-path: gen/app/resources/
+        #   artifacts:
+        #     - app-b.zip
+
+  ## DESTINATION CONTENT
+  - name: cap-reference-destination-content
+    type: com.sap.application.content
+    build-parameters:
+      no-source: true
+    requires:
+      - name: cap-reference-auth
+        parameters:
+          service-key:
+            name: cap-reference-auth-key
+      - name: cap-reference-repo-host
+        parameters:
+          service-key:
+            name: cap-reference-repo-host-key
+      - name: cap-reference-destination
+        parameters:
+          content-target: true
+      - name: srv-api
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            # This destination is needed so that the UI5 applications in the repo host are discoverable for the managed application router
+            - Name: cap-reference-repo-host
+              ServiceInstanceName: cap-reference-repo-host
+              ServiceKeyName: cap-reference-repo-host-key
+              sap.cloud.service: cap-reference
+            - Name: cap-reference-auth
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: cap-reference-auth
+              ServiceKeyName: cap-reference-auth-key
+              sap.cloud.service: cap-reference
+            - Name: cap-reference-srv-api
+              Authentication: OAuth2UserTokenExchange
+              TokenServiceInstanceName: cap-reference-auth
+              TokenServiceKeyName: cap-reference-auth-key
+              URL: ~{srv-api/srv-url}
+
+  ## SERVICE BROKER
+  - name: cap-reference-api-sb
+    type: nodejs
+    path: gen/broker
+    build-parameters:
+      builder: npm-ci
+    parameters:
+      app-name: cap-reference-api-sb
+      memory: 1024M
+      disk-quota: 512M
+      api-name: CAP Reference API
+    properties:
+      SBF_BROKER_CREDENTIALS_HASH: > # not recommended for productive use
+        {
+          "broker-user": "[insert-value-here]" 
+        }
+    requires:
+      - name: cap-reference-api-auth
+      - name: cap-reference-logging
+      - name: srv-api
+        properties:
+          SBF_SERVICE_CONFIG:
+            CAP Reference API: # must be the same as api-name and in the catalog.json
+              extend_credentials:
+                shared:
+                  apiUrl: ~{srv-url}
+              extend_xssecurity:
+                per_plan:
+                  default:
+                    authorities:
+                      - $XSMASTERAPPNAME.plan_default
+              extend_catalog:
+                metadata:
+                  displayName: CAP Reference API
+          SBF_ENABLE_AUDITLOG: false
+    provides:
+      - name: cap-reference-api-sb-srv
+        properties:
+          app-name: ${app-name}
+          api-name: ${api-name}
+          srv-url: ${default-url}
+
+# RESOURCES
+resources:
+  ## SAAS REGISTRY
+  - name: cap-reference-registry
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: mtx-api
+    parameters:
+      service: saas-registry
+      service-plan: application
+      config:
+        xsappname: cap-reference-${org}-${space}
+        appName: cap-reference-${org}-${space}
+        displayName: cap-reference
+        description: CAP Reference Registry
+        category: "Category"
+        appUrls:
+          getDependencies: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/dependencies
+          onSubscription: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/tenant/{tenantId}
+          onSubscriptionAsync: true
+          onUnSubscriptionAsync: true
+          onUpdateDependenciesAsync: true
+          callbackTimeoutMillis: 300000 # Increase if your deployments are taking longer than that
+
+  ## DATABASE
+  - name: cap-reference-db
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: service-manager
+      service-plan: container
+
+  ## AUTHENTICATION
+  - name: cap-reference-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: cap-reference-${org}-${space}
+        tenant-mode: shared
+        oauth2-configuration:
+          redirect-uris:
+            - "http*://*.${default-domain}/**"
+    requires:
+      - name: app-api
+
+    ## AUTHENTICATION BROKER
+  - name: cap-reference-api-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-name: cap-reference-api-auth
+      service-plan: broker
+      xsuaa-app: cap-reference-api
+      config:
+        xsappname: ${xsuaa-app}
+        authorities:
+          # grants access to API service
+          - $XSAPPNAME(application,cap-reference-${org}-${space}).api
+    properties:
+      xsuaa-app: ${xsuaa-app}
+
+  ## REPOSITORY HOST
+  - name: cap-reference-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+
+  ## REPOSITORY RUNTIME
+  - name: cap-reference-repo-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+
+  ## CONNECTIVITY
+  - name: cap-reference-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
+      service-plan: lite
+
+  ## DESTINATION
+  - name: cap-reference-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+
+  ## JOB SCHEDULER
+  - name: cap-reference-job-scheduler
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: jobscheduler
+      service-plan: standard
+      config:
+        enable-xsuaa-support: true
+
+  ## LOGGING
+  - name: cap-reference-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: application-logs
+      service-plan: lite
+
+  ## AUTOSCALER
+  - name: cap-reference-autoscaler
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: autoscaler
+      service-plan: standard
+

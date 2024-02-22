@@ -1,0 +1,43 @@
+# CAP btp-cap-sample-external-communication_ps
+**/*.db
+**/connection.properties
+# The approuter default-env.json was added with git add --force for local testing
+**/default-*.json
+**/.cdsrc-private.json
+**/gen/
+**/node_modules/
+**/target/
+**/dist/
+*.sqlite
+*.sqlite*
+**/coverage/
+
+# Environment
+#.env  # uncomment in productive use
+
+# Web IDE, App Studio
+**/.che/
+**/.gen/
+
+# MTA
+**/*_mta_build_tmp
+**/*.mtar
+**/*.mta
+mta_archives/
+
+# Other
+**/.DS_Store
+**/*.orig
+**/*.log
+
+# IDEs
+.vscode
+.idea
+
+# UI5 builds
+dist/
+resources/
+
+# Smoke test Screenshots
+**/screenshots/
+@cds-models

@@ -1,0 +1,17 @@
+{
+  "services": [
+    {
+      "name": "CAP Reference API",
+      "description": "API for CAP Reference",
+      "bindable": true,
+      "plans": [
+        {
+          "name": "api",
+          "description": "API Plan",
+          "id": "920dc2c6-616f-4abc-b7c1-6be9bf00f037"
+        }
+      ],
+      "id": "1c8b0cbc-d449-4ff3-8653-3485516475f7"
+    }
+  ]
+}

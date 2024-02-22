@@ -1,0 +1,62 @@
+{
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.mtcallback",
+      "description": "Subscription via SaaS Registry",
+      "grant-as-authority-to-apps": [
+        "$XSAPPNAME(application,sap-provisioning,tenant-onboarding)"
+      ]
+    },
+    {
+      "name": "$XSAPPNAME.api",
+      "description": "api"
+    },
+    {
+      "name": "$XSAPPNAME.CAPReferenceViewer",
+      "description": "CAPReferenceViewer"
+    },
+    {
+      "name": "$XSAPPNAME.CAPReferenceManager",
+      "description": "CAPReferenceManager"
+    },
+    {
+      "name": "$XSAPPNAME.CAPReferenceAdministrator",
+      "description": "CAPReferenceAdministrator"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "api",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.api"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "CAPReferenceViewer",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.CAPReferenceViewer"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "CAPReferenceManager",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.CAPReferenceManager"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "CAPReferenceAdministrator",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.CAPReferenceAdministrator"
+      ],
+      "attribute-references": []
+    }
+  ]
+}
