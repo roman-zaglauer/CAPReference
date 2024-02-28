@@ -76,7 +76,7 @@
     "typescript": "^5"
   },
   "cds": {
-    "profile": "with-mtx-sidecar",
+    "profile": "development",
     "i18n": {
       "folders": [
         "./i18n",
