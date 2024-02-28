@@ -9,7 +9,7 @@
     {
       "name": "$XSAPPNAME.api",
       "description": "Grants Access To  API",
-      "grant-as-authority-to-apps": ["$XSAPPNAME(broker, cap-reference-api)"]
+      "grant-as-authority-to-apps": ["$XSAPPNAME(application, cap-reference-api)"]
     },
     {
       "name": "$XSAPPNAME.jobscheduler",

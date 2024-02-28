@@ -1,9 +1,0 @@
-{
-  "extends": "../../../tsconfig.json",
-  "include": ["./sidecar/**/*.ts"],
-  "compilerOptions": {
-    "composite": true,
-    "rootDir": ".",
-    "outDir": "../../../gen/mtx"
-  },
-}

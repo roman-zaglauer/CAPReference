@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "cds-serve",
-    "start:without-mtx-sidecar": "cds-ts serve --profile without-mtx-sidecar",
+    "start:development": "cds-ts serve --profile development",
     "update": "npx npm-check-updates -u && npm install",
     "build": "npx -p @sap/cds-dk cds build --production && npx tsc -b && npm run build:cds-types",
     "build:cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory ./gen/srv/srv/types/@cds-models",
@@ -19,12 +19,8 @@
     "lint": "cds lint && eslint . --ext .ts",
     "test": "jest",
     "watch": "cds-ts watch",
-    "watch:mtx": "cd mtx/sidecar/srv && npm run watch",
-    "watch:without-mtx-sidecar": "cds-ts watch --profile without-mtx-sidecar",
-    "subscribe:t1": "cds subscribe t1 --to http://localhost:4005 -u alice:",
-    "subscribe:t2": "cds subscribe t2 --to http://localhost:4005 -u erin:",
-    "profile:with-mtx-sidecar": "cds env get requires --profile with-mtx-sidecar",
-    "profile:without-mtx-sidecar": "cds env get requires --profile without-mtx-sidecar",
+    "watch:development": "cds-ts watch --profile development",
+    "profile:development": "cds env get requires --profile development",
     "watch-app-a": "cds watch --open cap.refernce.appa/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "dependencies": {
@@ -36,7 +32,6 @@
     "@sap/cds": "^7",
     "@sap/cds-common-content": "^1",
     "@sap/cds-hana": "^2",
-    "@sap/cds-mtxs": "^1",
     "@sap/xsenv": "^4",
     "@sap/xssec": "^3",
     "express": "^4",
@@ -91,28 +86,10 @@
     ]
     },
     "requires": {
-      "[without-mtx-sidecar]": {
-        "db": {
-          "kind": "sqlite",
-          "credentials": {
-            "database": ":memory:"
-          }
-        },
-        "multitenancy": false
-      },
-      "[development]": {
-        "db": {
-          "credentials": {
-            "database": "../../.sqlite/db.sqlite"
-          }
-        },
-        "multitenancy": true
-      },
       "[production]": {
         "db": {
           "kind": "hana"
         },
-        "multitenancy": true,
         "auth": {
           "kind": "xsuaa"
         },
@@ -125,11 +102,6 @@
         "model": "srv/external/API_BUSINESS_PARTNER",
         "csrf": true,
         "csrfInBatch": true,
-        "[without-mtx-sidecar]": {
-          "credentials": {
-            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/"
-          }
-        },
         "[development]": {
           "credentials": {
             "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/"

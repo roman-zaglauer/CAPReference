@@ -11,37 +11,10 @@ build-parameters:
     - builder: custom
       commands:
         - npm run build:module-a
-        - npm run build:module-a:mtx
         # - npm run build:module-b
-        - npm run build:broker
 
 # MODULES
 modules:
-  ## MTX SIDECAR
-  - name: cap-reference-mtx
-    type: nodejs
-    path: gen/mtx/sidecar
-    build-parameters:
-      builder: npm-ci
-    parameters:
-      memory: 1024M
-      disk-quota: 512M
-    requires:
-      - name: cap-reference-db
-      - name: cap-reference-auth
-      - name: cap-reference-destination
-      - name: cap-reference-connectivity
-      - name: cap-reference-job-scheduler
-      - name: cap-reference-registry
-      - name: cap-reference-logging
-      - name: app-api
-        properties:
-          SUBSCRIPTION_URL: ~{app-protocol}://\${tenant_subdomain}-~{app-uri}
-    provides:
-      - name: mtx-api
-        properties:
-          mtx-url: ${default-url}
-
   ## SERVICE
   - name: cap-reference-srv
     type: nodejs
@@ -58,7 +31,6 @@ modules:
       - name: cap-reference-connectivity
       - name: cap-reference-job-scheduler
       - name: cap-reference-logging
-      - name: cap-reference-registry
       - name: cap-reference-autoscaler
         parameters:
           config:
@@ -122,11 +94,6 @@ modules:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
-      - name: mtx-api
-        group: destinations
-        properties:
-          name: mtx-api # must be used in xs-app.json as well
-          url: ~{mtx-url}
       - name: cap-reference-auth
       - name: cap-reference-repo-runtime
       - name: cap-reference-destination
@@ -196,72 +163,8 @@ modules:
               TokenServiceKeyName: cap-reference-auth-key
               URL: ~{srv-api/srv-url}
 
-  ## SERVICE BROKER
-  - name: cap-reference-api-sb
-    type: nodejs
-    path: gen/broker
-    build-parameters:
-      builder: npm-ci
-    parameters:
-      app-name: cap-reference-api-sb
-      memory: 1024M
-      disk-quota: 512M
-      api-name: CAP Reference API
-    properties:
-      SBF_BROKER_CREDENTIALS_HASH: > # not recommended for productive use
-        {
-          "broker-user": "[insert-value-here]" 
-        }
-    requires:
-      - name: cap-reference-api-auth
-      - name: cap-reference-logging
-      - name: srv-api
-        properties:
-          SBF_SERVICE_CONFIG:
-            CAP Reference API: # must be the same as api-name and in the catalog.json
-              extend_credentials:
-                shared:
-                  apiUrl: ~{srv-url}
-              extend_xssecurity:
-                per_plan:
-                  default:
-                    authorities:
-                      - $XSMASTERAPPNAME.plan_default
-              extend_catalog:
-                metadata:
-                  displayName: CAP Reference API
-          SBF_ENABLE_AUDITLOG: false
-    provides:
-      - name: cap-reference-api-sb-srv
-        properties:
-          app-name: ${app-name}
-          api-name: ${api-name}
-          srv-url: ${default-url}
-
 # RESOURCES
 resources:
-  ## SAAS REGISTRY
-  - name: cap-reference-registry
-    type: org.cloudfoundry.managed-service
-    requires:
-      - name: mtx-api
-    parameters:
-      service: saas-registry
-      service-plan: application
-      config:
-        xsappname: cap-reference-${org}-${space}
-        appName: cap-reference-${org}-${space}
-        displayName: cap-reference
-        description: CAP Reference Registry
-        category: "Category"
-        appUrls:
-          getDependencies: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/dependencies
-          onSubscription: ~{mtx-api/mtx-url}/-/cds/saas-provisioning/tenant/{tenantId}
-          onSubscriptionAsync: true
-          onUnSubscriptionAsync: true
-          onUpdateDependenciesAsync: true
-          callbackTimeoutMillis: 300000 # Increase if your deployments are taking longer than that
-
   ## DATABASE
   - name: cap-reference-db
     type: org.cloudfoundry.managed-service
@@ -291,15 +194,16 @@ resources:
     parameters:
       service: xsuaa
       service-name: cap-reference-api-auth
-      service-plan: broker
+      service-plan: application
       xsuaa-app: cap-reference-api
       config:
         xsappname: ${xsuaa-app}
+        tenant-mode: dedicated
         authorities:
           # grants access to API service
-          - $XSAPPNAME(application,cap-reference-${org}-${space}).api
-    properties:
-      xsuaa-app: ${xsuaa-app}
+          - $XSAPPNAME(application,cap-reference).api
+    service-keys:
+      - name: ext_communication
 
   ## REPOSITORY HOST
   - name: cap-reference-repo-host
@@ -362,4 +266,3 @@ resources:
     parameters:
       service: autoscaler
       service-plan: standard
-
