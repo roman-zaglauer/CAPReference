@@ -34,8 +34,8 @@ annotate service.Roots with @(UI: {
     Facets             : [
         {
             $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>partner}',
-            Target: '@UI.FieldGroup#Partner'
+            Label : '{i18n>root}',
+            Target: '@UI.FieldGroup#Root'
         },
         {
             $Type : 'UI.ReferenceFacet',
@@ -49,7 +49,7 @@ annotate service.Roots with @(UI: {
         }
 
     ],
-    FieldGroup #Partner: {
+    FieldGroup #Root: {
         $Type: 'UI.FieldGroupType',
         Data : [
             {Value: me_ID},
