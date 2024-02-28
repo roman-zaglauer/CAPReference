@@ -202,8 +202,8 @@ resources:
         authorities:
           # grants access to API service
           - $XSAPPNAME(application,cap-reference).api
-    service-keys:
-      - name: ext_communication
+      service-keys:
+        - name: ext_communication
 
   ## REPOSITORY HOST
   - name: cap-reference-repo-host
