@@ -110,6 +110,7 @@
             "settings": {
               "entitySet": "Roots",
               "variantManagement": "Page",
+              "initialLoad": "Enabled",
               "navigation": {
                 "Roots": {
                   "detail": {
@@ -129,9 +130,20 @@
               "editableHeaderContent": false,
               "entitySet": "Roots",
               "navigation": {
-                "Leafs": {
+                "leafs": {
                   "detail": {
                     "route": "LeafsObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "leafs/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "creationMode": {
+                      "inlineCreationRowsHiddenInEditMode": true,
+                      "name": "InlineCreationRows",
+                      "createAtEnd": true
+                    }
                   }
                 }
               }
