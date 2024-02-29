@@ -29,7 +29,7 @@ modules:
       - name: cap-reference-auth
       - name: cap-reference-destination
       - name: cap-reference-connectivity
-      - name: cap-reference-job-scheduler
+      # - name: cap-reference-job-scheduler
       - name: cap-reference-logging
       - name: cap-reference-autoscaler
         parameters:
@@ -244,14 +244,14 @@ resources:
                 Type: HTTP
                 URL: https://ui5.sap.com
 
-  ## JOB SCHEDULER
-  - name: cap-reference-job-scheduler
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: jobscheduler
-      service-plan: standard
-      config:
-        enable-xsuaa-support: true
+  # ## JOB SCHEDULER
+  # - name: cap-reference-job-scheduler
+  #   type: org.cloudfoundry.managed-service
+  #   parameters:
+  #     service: jobscheduler
+  #     service-plan: standard
+  #     config:
+  #       enable-xsuaa-support: true
 
   ## LOGGING
   - name: cap-reference-logging
