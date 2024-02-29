@@ -1,35 +1,17 @@
 {
   "requires": {
-    "[without-mtx-sidecar]": {
-      "auth": {
-        "users": {
-          "erin": {
-            "roles": ["CAPReference", "cds.Subscriber", "admin"]
-          },
-          "bob": {
-            "roles": ["CAPReferenceAdministrator", "cds.Subscriber", "admin"]
-          },
-          "alice": {
-            "roles": ["CAPReferenceManager", "CAPReferenceAdministrator", "cds.Subscriber", "admin", "api"]
-          }
-        }
-      }
-    },
     "[development]": {
       "auth": {
         "strategy": "mock",
         "users": {
           "erin": {
-            "tenant": "t2",
-            "roles": ["CAPReference", "cds.Subscriber", "admin"]
+            "roles": ["CAPReferenceViewer"]
           },
           "bob": {
-            "tenant": "t1",
-            "roles": ["CAPReferenceAdministrator", "cds.Subscriber", "admin"]
+            "roles": ["CAPReferenceAdministrator"]
           },
           "alice": {
-            "tenant": "t1",
-            "roles": ["CAPReferenceManager", "CAPReferenceAdministrator", "cds.Subscriber", "admin", "api"]
+            "roles": ["CAPReferenceManager", "CAPReferenceAdministrator", "api"]
           }
         }
       }
