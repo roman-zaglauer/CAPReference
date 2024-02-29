@@ -1,24 +1,18 @@
 {
-    "compilerOptions": {
-        "target": "es2022",
-        "module": "es2022",
-        "skipLibCheck": true,
-        "allowJs": true,
-        "strict": true,
-        "strictPropertyInitialization": false,
-        "moduleResolution": "node",
-        "rootDir": "./webapp",
-        "baseUrl": "./",
-        "paths": {
-            "cap/refernce/appa/*": [
-                "./webapp/*"
-            ]
-        },
-        "types": [
-            "@sapui5/ts-types-esm"
-        ]
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "skipLibCheck": true,
+    "allowJs": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "moduleResolution": "node",
+    "rootDir": "./webapp",
+    "baseUrl": "./",
+    "paths": {
+      "cap/reference/appa/*": ["./webapp/*"]
     },
-    "include": [
-        "./webapp/**/*"
-    ]
+    "types": ["@sapui5/ts-types-esm"]
+  },
+  "include": ["./webapp/**/*"]
 }

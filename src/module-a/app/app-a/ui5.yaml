@@ -1,6 +1,6 @@
 specVersion: "2.6"
 metadata:
-  name: cap.refernce.appa
+  name: cap.reference.appa
 type: application
 server:
   customMiddleware:
@@ -26,6 +26,6 @@ builder:
     - name: ui5-task-zipper
       afterTask: generateCachebusterInfo
       configuration:
-        archiveName: app-a
+        archiveName: capreferenceappa
         additionalFiles:
-        - xs-app.json
+          - xs-app.json

@@ -29,6 +29,7 @@ mta_archives/
 **/.DS_Store
 **/*.orig
 **/*.log
+**/*.http
 
 # IDEs
 .vscode

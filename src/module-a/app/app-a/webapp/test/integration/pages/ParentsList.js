@@ -8,7 +8,7 @@ sap.ui.define(["sap/fe/test/ListReport"], function (ListReport) {
 
   return new ListReport(
     {
-      appId: "cap.refernce.appa",
+      appId: "cap.reference.appa",
       componentId: "RootsList",
       entitySet: "Roots",
     },

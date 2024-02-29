@@ -11,7 +11,7 @@
 |**Service URL**<br><http://localhost:4004/service/>
 |**Module Name**<br>app-a|
 |**Application Title**<br>App A|
-|**Namespace**<br>cap.refernce|
+|**Namespace**<br>cap.reference|
 |**UI5 Theme**<br>sap_horizon|
 |**UI5 Version**<br>1.120.6|
 |**Enable Code Assist Libraries**<br>True|

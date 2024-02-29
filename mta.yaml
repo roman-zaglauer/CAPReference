@@ -79,7 +79,7 @@ modules:
           srv-url: ${default-url}
 
   ## UI5 APP A
-  - name: app-a
+  - name: capreferenceappa
     type: html5
     path: src/module-a/app/app-a
     build-parameters:
@@ -91,7 +91,7 @@ modules:
       supported-platforms: []
 
   ## UI5 APP B
-  # - name: app-b
+  # - name: capreferenceappb
   #   type: html5
   #   path: src/module-a/app/app-b
   #   build-parameters:
@@ -148,14 +148,14 @@ modules:
     build-parameters:
       build-result: gen/app/resources
       requires:
-        - name: app-a
+        - name: capreferenceappa
           target-path: gen/app/resources/
           artifacts:
-            - app-a.zip
-        # - name: app-b
+            - capreferenceappa.zip
+        # - name: capreferenceappb
         #   target-path: gen/app/resources/
         #   artifacts:
-        #     - app-b.zip
+        #     - capreferenceappb.zip
 
   ## DESTINATION CONTENT
   - name: cap-reference-destination-content
