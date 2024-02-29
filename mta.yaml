@@ -51,7 +51,7 @@ modules:
           srv-url: ${default-url}
 
   ## UI5 APP A
-  - name: app-a
+  - name: capreferenceappa
     type: html5
     path: src/module-a/app/app-a
     build-parameters:
@@ -63,7 +63,7 @@ modules:
       supported-platforms: []
 
   ## UI5 APP B
-  # - name: app-b
+  # - name: capreferenceappb
   #   type: html5
   #   path: src/module-a/app/app-b
   #   build-parameters:
@@ -80,13 +80,9 @@ modules:
     path: src/approuter # from cds.env.folders. Consider also cds.env.build.target -> gen/app
     build-parameters:
       ignore:
-        - "index.html"
+        - node_modules/
     parameters:
       keep-existing-routes: true
-      disk-quota: 1024M
-      memory: 1024M
-    properties:
-      TENANT_HOST_PATTERN: "^(.*)-${default-uri}"
     requires:
       - name: srv-api
         group: destinations
@@ -98,11 +94,6 @@ modules:
       - name: cap-reference-repo-runtime
       - name: cap-reference-destination
       - name: cap-reference-logging
-    provides:
-      - name: app-api
-        properties:
-          app-protocol: ${protocol}
-          app-uri: ${default-uri}
 
   ## APPLICATION CONTENT
   - name: cap-reference-app-content
@@ -115,14 +106,14 @@ modules:
     build-parameters:
       build-result: gen/app/resources
       requires:
-        - name: app-a
+        - name: capreferenceappa
           target-path: gen/app/resources/
           artifacts:
-            - app-a.zip
-        # - name: app-b
+            - capreferenceappa.zip
+        # - name: capreferenceappb
         #   target-path: gen/app/resources/
         #   artifacts:
-        #     - app-b.zip
+        #     - capreferenceappb.zip
 
   ## DESTINATION CONTENT
   - name: cap-reference-destination-content
@@ -180,15 +171,10 @@ resources:
       service-plan: application
       path: ./xs-security.json
       config:
-        xsappname: cap-reference-${org}-${space}
-        tenant-mode: shared
-        oauth2-configuration:
-          redirect-uris:
-            - "http*://*.${default-domain}/**"
-    requires:
-      - name: app-api
+        xsappname: cap-reference
+        tenant-mode: dedicated
 
-    ## AUTHENTICATION BROKER
+    ## AUTHENTICATION API
   - name: cap-reference-api-auth
     type: org.cloudfoundry.managed-service
     parameters:

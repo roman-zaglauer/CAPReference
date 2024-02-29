@@ -21,7 +21,7 @@
     "watch": "cds-ts watch",
     "watch:development": "cds-ts watch --profile development",
     "profile:development": "cds env get requires --profile development",
-    "watch-app-a": "cds watch --open cap.refernce.appa/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-app-a": "cds watch --open cap.reference.appa/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "dependencies": {
     "@sap-cloud-sdk/connectivity": "^3",
@@ -83,7 +83,7 @@
         "_i18n",
         "i18n",
         "assets/i18n"
-    ]
+      ]
     },
     "requires": {
       "[production]": {

@@ -1,10 +1,10 @@
 sap.ui.require(
   [
     "sap/fe/test/JourneyRunner",
-    "cap/refernce/appa/test/integration/FirstJourney",
-    "cap/refernce/appa/test/integration/pages/RootsList",
-    "cap/refernce/appa/test/integration/pages/RootsObjectPage",
-    "cap/refernce/appa/test/integration/pages/LeafsObjectPage",
+    "cap/reference/appa/test/integration/FirstJourney",
+    "cap/reference/appa/test/integration/pages/RootsList",
+    "cap/reference/appa/test/integration/pages/RootsObjectPage",
+    "cap/reference/appa/test/integration/pages/LeafsObjectPage",
   ],
   function (
     JourneyRunner,
@@ -16,7 +16,7 @@ sap.ui.require(
     "use strict";
     var JourneyRunner = new JourneyRunner({
       // start index.html in web folder
-      launchUrl: sap.ui.require.toUrl("cap/refernce/appa") + "/index.html",
+      launchUrl: sap.ui.require.toUrl("cap/reference/appa") + "/index.html",
     });
 
     JourneyRunner.run(

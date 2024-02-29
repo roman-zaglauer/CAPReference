@@ -8,11 +8,11 @@ annotate service.Roots with @(restrict: [
         to   : ['CAPReferenceViewer']
     },
     {
-        grant: ['*'],
+        grant: ['READ'],
         to   : ['CAPReferenceManager']
     },
     {
-        grant: ['READ'],
+        grant: ['*'],
         to   : ['CAPReferenceAdministrator']
     }
 ]);
@@ -27,7 +27,7 @@ annotate service.Leafs with @(restrict: [
         to   : ['CAPReferenceManager']
     },
     {
-        grant: ['READ'],
+        grant: ['*'],
         to   : ['CAPReferenceAdministrator']
     }
 ]);
