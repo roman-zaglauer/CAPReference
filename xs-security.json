@@ -1,20 +1,9 @@
 {
-  "authorities": [
-    "$XSAPPNAME.cds.Subscriber",
-    "$XSAPPNAME.MtxDiagnose",
-    "$XSAPPNAME.mtdeployment",
-    "$XSAPPNAME.mtcallback"
-  ],
   "scopes": [
     {
       "name": "$XSAPPNAME.api",
       "description": "Grants Access To  API",
       "grant-as-authority-to-apps": ["$XSAPPNAME(application, cap-reference-api)"]
-    },
-    {
-      "name": "$XSAPPNAME.jobscheduler",
-      "description": "Job Scheduler",
-      "grant-as-authority-to-apps": ["$XSSERVICENAME(cap-reference-job-scheduler)"]
     },
     {
       "name": "$XSAPPNAME.CAPReferenceViewer",
@@ -27,23 +16,6 @@
     {
       "name": "$XSAPPNAME.CAPReferenceAdministrator",
       "description": "CAP Reference Administrator"
-    },
-    {
-      "name": "$XSAPPNAME.mtcallback",
-      "description": "Subscription via SaaS Registry",
-      "grant-as-authority-to-apps": ["$XSAPPNAME(application,sap-provisioning,tenant-onboarding)"]
-    },
-    {
-      "name": "$XSAPPNAME.MtxDiagnose",
-      "description": "Diagnose MTX"
-    },
-    {
-      "name": "$XSAPPNAME.mtdeployment",
-      "description": "Deploy application"
-    },
-    {
-      "name": "$XSAPPNAME.cds.Subscriber",
-      "description": "Subscribe to application"
     }
   ],
   "attributes": [],
@@ -62,16 +34,6 @@
       "name": "CAPReferenceAdministrator",
       "description": "CAP Reference Administrator",
       "scope-references": ["$XSAPPNAME.CAPReferenceAdministrator"]
-    },
-    {
-      "name": "MultitenancyAdministrator",
-      "description": "Administrate multitenant applications",
-      "scope-references": ["$XSAPPNAME.MtxDiagnose", "$XSAPPNAME.mtdeployment", "$XSAPPNAME.mtcallback"]
-    },
-    {
-      "name": "Subscriber",
-      "description": "Subscribe to application",
-      "scope-references": ["$XSAPPNAME.cds.Subscriber"]
     }
   ],
   "role-collections": [
