@@ -15,8 +15,7 @@
     },
     {
       "name": "$XSAPPNAME.CAPReferenceAdministrator",
-      "description": "CAP Reference Administrator",
-      "grant-as-authority-to-apps": ["$XSAPPNAME(application, cap-reference-api)"]
+      "description": "CAP Reference Administrator"
     }
   ],
   "attributes": [],
