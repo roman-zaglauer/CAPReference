@@ -1,5 +1,5 @@
 {
-  "welcomeFile": "app-a/index.html",
+  "welcomeFile": "capreferenceappa/index.html",
   "authenticationMethod": "route",
   "routes": [
     {
