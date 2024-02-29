@@ -154,14 +154,26 @@ modules:
               TokenServiceKeyName: cap-reference-auth-key
               URL: ~{srv-api/srv-url}
 
+  ## DESTINATION CONTENT
+  - name: cap-reference-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: cap-reference-db
+    build-parameters:
+      ignore:
+        - node_modules/
+
 # RESOURCES
 resources:
   ## DATABASE
   - name: cap-reference-db
-    type: org.cloudfoundry.managed-service
+    type: com.sap.xs.hdi-container
     parameters:
-      service: service-manager
-      service-plan: container
+      service: hana # hana or 'hanatrial' on trial landscapes
+      service-plan: hdi-shared
 
   ## AUTHENTICATION
   - name: cap-reference-auth
