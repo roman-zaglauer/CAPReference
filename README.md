@@ -10,4 +10,4 @@ This repository showcases diverse CAP features and scenarios, accessible through
 
 ## Singletenancy
 
-- - [CAP Reference Project for single tenancy](https://github.com/roman-zaglauer/cap-samples/tree/singletenancy)
+- [CAP Reference Project for single tenancy](https://github.com/roman-zaglauer/cap-samples/tree/singletenancy)
