@@ -1,0 +1,34 @@
+{
+  "name": "bookshop",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "https://github.com/roman-zaglauer/cap-samples/tree/bookshop",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^7",
+    "express": "^4",
+    "@sap/xssec": "^3",
+    "@sap/cds-hana": "^2"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^7"
+  },
+  "scripts": {
+    "license-report": "license-report --output=table",
+    "start": "cds-serve",
+    "build": "mbt build -t gen --mtar mta.tar",
+    "deploy": "cf deploy gen/mta.tar --retries 1",
+    "undeploy": "cf undeploy cap-reference --delete-services --delete-service-keys",
+    "cleanup": "rimraf **/gen && rimraf **/dist && rimraf **/coverage && rimraf **/package-lock.json && rimraf **/node_modules"
+  },
+  "cds": {
+    "[production]": {
+      "requires": {
+        "auth": "xsuaa",
+        "db": "hana"
+      }
+    }
+  }
+}

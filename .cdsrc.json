@@ -1,0 +1,14 @@
+{
+    "requires": {
+      "[development]": {
+        "auth": {
+          "strategy": "mock",
+          "users": {
+            "alice": {
+              "roles": ["admin"]
+            }
+          }
+        }
+      }
+    }
+  }

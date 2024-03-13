@@ -1,13 +1,41 @@
-# SAP Cloud Application Programming Model (CAP) Samples
+# CAPReference
 
-Explore CAP (SAP Cloud Application Programming Model) features and scenarios through dedicated branches in this repository.
+A CAP reference project
 
-This repository showcases diverse CAP features and scenarios, accessible through their respective dedicated branches.
+> **Note**: Follow this [link](https://github.com/roman-zaglauer/cap-samples/tree/main) to show all available scenarios
 
-## Multitenancy
+```shell
+npm i
+# build application
+npm run build
+# Login to cloud foundry and select org/space where you want to deploy
+cf login --sso
+# deploy the application
+npm run deploy
+```
 
-- [CAP Reference Project for multitenancy](https://github.com/roman-zaglauer/cap-samples/tree/multitenancy)
+## Getting Started
 
-## Singletenancy
+Welcome to your new project.
 
-- [CAP Reference Project for single tenancy](https://github.com/roman-zaglauer/cap-samples/tree/singletenancy)
+It contains these folders and files, following our recommended project layout:
+
+File or Folder | Purpose
+---------|----------
+`app/` | content for UI frontends goes here
+`db/` | your domain models and data go here
+`srv/` | your service models and code go here
+`package.json` | project metadata and configuration
+`readme.md` | this getting started guide
+
+
+### Next Steps
+
+- Open a new terminal and run `cds watch` 
+- (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
+- Start adding content, for example, a [db/schema.cds](db/schema.cds).
+
+
+### Learn More
+
+Learn more at https://cap.cloud.sap/docs/get-started/.
