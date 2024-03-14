@@ -251,7 +251,7 @@ resources:
       config:
         xsappname: cap-reference-${org}-${space}
         appName: cap-reference-${org}-${space}
-        displayName: cap-reference
+        displayName: cap-reference-${org}
         description: CAP Reference Registry
         category: "Category"
         appUrls:
