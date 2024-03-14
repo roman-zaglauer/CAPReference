@@ -57,7 +57,7 @@ resources:
       service-plan: application
       path: ./xs-security.json
       config:
-        xsappname: bookshop-${org}-${space}
+        xsappname: bookshop
         tenant-mode: dedicated
         oauth2-configuration:
           redirect-uris:
@@ -73,7 +73,7 @@ resources:
         tenant-mode: dedicated
         xsappname: bookshop-api
         authorities:
-          - $XSAPPNAME(application,bookshop).admin
+          - $XSAPPNAME(application,bookshop).api
       service-keys:
         - name: bookshop-api-sk
 

@@ -2,6 +2,16 @@ using { sap.capire.bookshop as my } from '../db/schema';
 service CatalogService {
 
   /** For displaying lists of Books */
+      @restrict: [
+        {
+            grant: 'READ',
+            to   : 'api'
+        },
+        {
+            grant: '*',
+            to   : 'admin'
+        }
+    ]
   @readonly entity ListOfBooks as projection on Books
   excluding { descr };
 
