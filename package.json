@@ -20,7 +20,7 @@
     "start": "cds-serve",
     "build": "mbt build -t gen --mtar mta.tar",
     "deploy": "cf deploy gen/mta.tar --retries 1",
-    "undeploy": "cf undeploy cap-reference --delete-services --delete-service-keys",
+    "undeploy": "cf undeploy bookshop --delete-services --delete-service-keys",
     "cleanup": "rimraf **/gen && rimraf **/dist && rimraf **/coverage && rimraf **/package-lock.json && rimraf **/node_modules"
   },
   "cds": {
