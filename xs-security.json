@@ -17,7 +17,7 @@
   "role-collections": [
     {
       "name": "admin",
-      "description": "Administrator",
+      "description": "Bookshop Administrator",
       "role-template-references": ["$XSAPPNAME.admin"]
     }
   ]
