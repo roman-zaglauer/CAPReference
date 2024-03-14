@@ -2,7 +2,8 @@
   "scopes": [
     {
       "name": "$XSAPPNAME.admin",
-      "description": "admin"
+      "description": "admin",
+      "grant-as-authority-to-apps": ["$XSAPPNAME(application,bookshop-api)"]
     }
   ],
   "attributes": [],

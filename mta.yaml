@@ -63,6 +63,20 @@ resources:
           redirect-uris:
             - "http*://*.${default-domain}/**"
 
+  # UAA for API communication
+  - name: bookshop-api-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      config:
+        tenant-mode: dedicated
+        xsappname: bookshop-api
+        authorities:
+          - $XSAPPNAME(application,bookshop).admin
+      service-keys:
+        - name: bookshop-api-sk
+
   - name: bookshop-db
     type: com.sap.xs.hdi-container
     parameters:
