@@ -11,3 +11,11 @@ This repository showcases diverse CAP features and scenarios, accessible through
 ## Singletenancy
 
 - [CAP Reference Project for single tenancy](https://github.com/roman-zaglauer/cap-samples/tree/singletenancy)
+
+## Bookshop
+
+- [Standard Bookshop Sample from SAP](https://github.com/roman-zaglauer/cap-samples/tree/bookshop)
+
+## Bookshop with API Access
+
+- [Standard Bookshop Sample from SAP with API Access](https://github.com/roman-zaglauer/cap-samples/tree/bookshop-api-communication)
