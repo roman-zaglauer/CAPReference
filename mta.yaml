@@ -1,5 +1,5 @@
 _schema-version: '3.1'
-ID: Bookshop
+ID: bookshop
 version: 1.0.0
 description: "A simple CAP project."
 parameters:
@@ -10,7 +10,7 @@ build-parameters:
       commands:
         - npx cds build --production
 modules:
-  - name: Bookshop-srv
+  - name: bookshop-srv
     type: nodejs
     path: gen/srv
     parameters:
@@ -22,18 +22,18 @@ modules:
         properties:
           srv-url: ${default-url}
     requires:
-      - name: Bookshop-auth
-      - name: Bookshop-db
+      - name: bookshop-auth
+      - name: bookshop-db
 
-  - name: Bookshop-db-deployer
+  - name: bookshop-db-deployer
     type: hdb
     path: gen/db
     parameters:
       buildpack: nodejs_buildpack
     requires:
-      - name: Bookshop-db
+      - name: bookshop-db
 
-  - name: Bookshop
+  - name: bookshop
     type: approuter.nodejs
     path: app/
     parameters:
@@ -47,19 +47,20 @@ modules:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
-      - name: Bookshop-auth
+      - name: bookshop-auth
 
 resources:
-  - name: Bookshop-auth
+  - name: bookshop-auth
     type: org.cloudfoundry.managed-service
     parameters:
       service: xsuaa
       service-plan: application
       path: ./xs-security.json
       config:
-        xsappname: Bookshop-${org}-${space}
+        xsappname: bookshop-${org}-${space}
         tenant-mode: dedicated
-  - name: Bookshop-db
+        
+  - name: bookshop-db
     type: com.sap.xs.hdi-container
     parameters:
       service: hana
