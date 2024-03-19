@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["srv/**/*.ts"],
+  "include": ["srv/**/*.ts", "test/*.test.ts"],
   "compilerOptions": {
     "composite": true,
     "rootDir": ".",
-    "outDir": "gen/srv"
+    "outDir": "gen/srv",
+    "moduleResolution": "NodeNext"
   }
 }
