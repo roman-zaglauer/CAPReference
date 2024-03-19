@@ -18,12 +18,8 @@ describe("Service Health Check", () => {
       "content-type": "application/xml",
       "odata-version": "4.0",
     });
-    expect(data).to.contain(
-      '<EntitySet Name="Leafs" EntityType="CAPReferenceAPIService.Leafs"/>',
-    );
-    expect(data).to.contain(
-      '<FunctionImport Name="determineLeafs" Function="CAPReferenceAPIService.determineLeafs" EntitySet="Leafs"/>',
-    );
+    expect(data).to.contain('<EntitySet Name="Leafs" EntityType="CAPReferenceAPIService.Leafs"/>');
+    expect(data).to.contain('<FunctionImport Name="determineLeafs" Function="CAPReferenceAPIService.determineLeafs" EntitySet="Leafs"/>');
     expect(status).to.equal(200);
   });
 });

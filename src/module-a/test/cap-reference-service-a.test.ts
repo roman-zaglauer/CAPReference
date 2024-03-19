@@ -1,5 +1,5 @@
 import cds from "@sap/cds";
-import { HttpStatusCode, isAxiosError } from "axios";
+import { HttpStatusCode } from "axios";
 import { Leaf, Root } from "#cds-models/CAPReferenceService";
 
 const { POST, PATCH, DELETE, GET, expect, axios } = cds.test(__dirname + "/..");
@@ -12,27 +12,13 @@ describe("Service Health Check", () => {
       "content-type": "application/xml",
       "odata-version": "4.0",
     });
-    expect(data).to.contain(
-      '<EntitySet Name="Roots" EntityType="CAPReferenceService.Roots">',
-    );
-    expect(data).to.contain(
-      '<EntitySet Name="Leafs" EntityType="CAPReferenceService.Leafs">',
-    );
-    expect(data).to.contain(
-      '<EntitySet Name="Persons" EntityType="CAPReferenceService.Persons"/>',
-    );
-    expect(data).to.contain(
-      '<EntitySet Name="Statuses" EntityType="CAPReferenceService.Statuses">',
-    );
-    expect(data).to.contain(
-      '<EntitySet Name="Countries" EntityType="CAPReferenceService.Countries">',
-    );
-    expect(data).to.contain(
-      '<EntitySet Name="Statuses_texts" EntityType="CAPReferenceService.Statuses_texts"/>',
-    );
-    expect(data).to.contain(
-      '<EntitySet Name="Countries_texts" EntityType="CAPReferenceService.Countries_texts"/>',
-    );
+    expect(data).to.contain('<EntitySet Name="Roots" EntityType="CAPReferenceService.Roots">');
+    expect(data).to.contain('<EntitySet Name="Leafs" EntityType="CAPReferenceService.Leafs">');
+    expect(data).to.contain('<EntitySet Name="Persons" EntityType="CAPReferenceService.Persons"/>');
+    expect(data).to.contain('<EntitySet Name="Statuses" EntityType="CAPReferenceService.Statuses">');
+    expect(data).to.contain('<EntitySet Name="Countries" EntityType="CAPReferenceService.Countries">');
+    expect(data).to.contain('<EntitySet Name="Statuses_texts" EntityType="CAPReferenceService.Statuses_texts"/>');
+    expect(data).to.contain('<EntitySet Name="Countries_texts" EntityType="CAPReferenceService.Countries_texts"/>');
     expect(status).to.equal(HttpStatusCode.Ok);
   });
 
@@ -41,7 +27,7 @@ describe("Service Health Check", () => {
       const { data, status } = await POST("service/Roots", {
         description: "Test",
         statuses_code: 3,
-        country_code: "DE"
+        country_code: "DE",
       } as Root);
       expect(data).to.be.an("object");
       expect(data).to.have.property("description");
@@ -52,9 +38,7 @@ describe("Service Health Check", () => {
     it("should retrieve a specific entity", async () => {
       const res = await POST("service/Roots", {});
 
-      const { data, status } = await GET(
-        `service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`
-      );
+      const { data, status } = await GET(`service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`);
       expect(data).to.be.an("object");
       expect(data).to.have.property("description");
       expect((data as Root).ID).to.equal((res.data as Root).ID);
@@ -62,40 +46,23 @@ describe("Service Health Check", () => {
     });
 
     it("should update an entity", async () => {
-        const res = await POST("service/Roots", {});
-  
-        const { data, status } = await PATCH(
-          `service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`, {
-            country_code: "FR"
-          } as Root);
-        expect(data).to.be.an("object");
-        expect(data).to.have.property("description");
-        expect((data as Root).country_code).to.equal("FR");
-        expect(status).to.equal(HttpStatusCode.Ok);
-      });
+      const res = await POST("service/Roots", {});
 
-      it("should delete an entity", async () => {
-        const res = await POST("service/Roots", {});
-  
-        const { status } = await DELETE(
-          `service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`);
-        expect(status).to.equal(HttpStatusCode.NoContent);
+      const { data, status } = await PATCH(`service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`, {
+        country_code: "FR",
+      } as Root);
+      expect(data).to.be.an("object");
+      expect(data).to.have.property("description");
+      expect((data as Root).country_code).to.equal("FR");
+      expect(status).to.equal(HttpStatusCode.Ok);
+    });
 
+    it("should delete an entity", async () => {
+      const res = await POST("service/Roots", {});
 
-        try {
-            await GET(
-                `service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`
-              );
-        } catch (error) {
-            if(isAxiosError(error)) {
-                expect(error.response.status).to.equal(HttpStatusCode.NotFound);
-            } else {
-                throw error;
-            }
-        }
+      expect((await DELETE(`service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`)).status).to.equal(HttpStatusCode.NoContent);
 
-     
-      });
+      await expect(GET(`service/Roots(ID=${(res.data as Root).ID},IsActiveEntity=false)`)).to.be.rejectedWith("404 - Not Found");
+    });
   });
-
 });
