@@ -9,29 +9,20 @@ build-parameters:
     - builder: custom
       commands:
         - npx cds build --production
+        - cp -r db/data gen/srv/srv/data
 modules:
   - name: bookshop-srv
     type: nodejs
     path: gen/srv
-    parameters:
-      buildpack: nodejs_buildpack
     build-parameters:
-      builder: npm
+      ignore: 
+        - node_modules/
     provides:
       - name: srv-api # required by consumers of CAP services (e.g. approuter)
         properties:
           srv-url: ${default-url}
     requires:
       - name: bookshop-auth
-      - name: bookshop-db
-
-  - name: bookshop-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: bookshop-db
 
   - name: bookshop
     type: approuter.nodejs
@@ -63,8 +54,8 @@ resources:
           redirect-uris:
             - "http*://*.${default-domain}/**"
 
-  - name: bookshop-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
+  # - name: bookshop-api-route-service
+  #   type: org.cloudfoundry.managed-service
+  #   parameters:
+  #     service: apimanagement-apiportal
+  #     service-plan: apim-as-route-service

@@ -7,28 +7,42 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^7",
+    "@sap/cds-dk": "^7",
     "express": "^4",
     "@sap/xssec": "^3",
-    "@sap/cds-hana": "^2"
+    "sqlite3": "^5"
   },
-  "devDependencies": {
-    "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^7"
-  },
+  "devDependencies": {},
   "scripts": {
     "license-report": "license-report --output=table",
-    "start": "cds-serve",
+    "start": "cds run",
     "build": "mbt build -t gen --mtar mta.tar",
     "deploy": "cf deploy gen/mta.tar --retries 1",
     "undeploy": "cf undeploy bookshop --delete-services --delete-service-keys",
     "cleanup": "rimraf **/gen && rimraf **/dist && rimraf **/coverage && rimraf **/package-lock.json && rimraf **/node_modules"
   },
   "cds": {
-    "[production]": {
-      "requires": {
+    "requires": {
+      "[development]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "database": ":memory:"
+          }
+        }
+      },
+      "[production]": {
         "auth": "xsuaa",
-        "db": "hana"
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "database": ":memory:"
+          }
+        }
       }
+    },
+    "features": {
+      "in_memory_db": true
     }
   }
 }
